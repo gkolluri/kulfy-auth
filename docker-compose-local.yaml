@@ -1,0 +1,37 @@
+version: "3.3"
+services:
+  web:
+    image: "node:6"
+    stdin_open: true
+    tty: true
+    environment:
+      - NODE_ENV=production
+      - LOG_LEVEL=verbose
+      - LOG_FILE_PATH=/app/dt.app.log
+      - API_PORT=1337
+      - MANAM_DB_URL=mongodb://54.164.19.201:21210/desitalkies
+      - SESSION_DB_HOST=redis
+      - SESSION_DB_PORT=6379
+      - SESSION_DB=dtLocalSession
+      - PUBSUB_DB_HOST=redis
+      - PUBSUB_DB_PORT=6379
+      - PUBSUB_DB=dtLcoalMem
+      - SESSION_SECRET=P7NNKXN72G3HBFEVJCZS6QTNW3WOZLO0WRRONPR39U27Z7GK9F54NK7HT445
+    build: .
+    volumes:
+      - .:/app
+    expose:
+      -  "1337"
+    ports:
+      - "1337:1337"
+    links:
+       - mongo
+       - redis
+  mongo:
+    image: mongo:latest
+    ports:
+      - "47017:27017"
+  redis:
+    image: redis:latest
+    ports:
+       - "46379:6379"
